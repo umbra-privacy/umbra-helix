@@ -8,30 +8,28 @@ import { PXE } from "@aztec/aztec.js";
 import { VerifyWallet } from "../components/VerifyWallet.js";
 import AppLayout from "../components/AppLayout.js";
 
-
-
 export const Router = ({
   isLoading,
   pxe,
-  errorMessage
+  errorMessage,
 }: {
   isLoading: boolean;
   pxe: PXE | undefined;
-  errorMessage: string
+  errorMessage: string;
 }) => {
-
   return (
     <ErrorBoundary FallbackComponent={ErrorView}>
       <BrowserRouter>
         <AppLayout pxe={pxe} isLoading={isLoading} errorMessage={errorMessage}>
           <Routes>
-            <Route path="/verify" element={<VerifyWallet pxe={pxe!} />} />
+            {/* <Route path="/verify" element={<VerifyWallet pxe={pxe!} />} />
             <Route path="/admin" element={<AdminPanel pxe={pxe!} />} />
-            <Route path="/" element={<Navigate to="/admin" replace />} />
+            <Route path="/" element={<Navigate to="/admin" replace />} /> */}
           </Routes>
         </AppLayout>
+        <h2>Only Header</h2>
         <Toaster position="top-right" theme="dark" />
       </BrowserRouter>
-    </ErrorBoundary >
+    </ErrorBoundary>
   );
 };

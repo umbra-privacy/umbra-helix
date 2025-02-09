@@ -9,7 +9,7 @@ import { Router } from "./router/router.js";
 
 function App() {
   const setPXEClient = useSetAtom(pxeAtom);
-  const [pxeLocal, setPXELocal] = useState<PXE>()
+  const [pxeLocal, setPXELocal] = useState<PXE>();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   useEffect(() => {
@@ -18,8 +18,8 @@ function App() {
     const pxeClient = createPXEClient(RPC_URL);
     waitForPXE(pxeClient)
       .then((_) => {
-        setPXEClient(pxeClient)
-        setPXELocal(pxeClient)
+        setPXEClient(pxeClient);
+        setPXELocal(pxeClient);
       })
       .catch((error) => {
         setErrorMessage(error.toString());
@@ -41,7 +41,12 @@ function App() {
     <>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {errorMessage && <h2 className="text-red-600">{errorMessage}</h2>}
-        <Router isLoading={isLoading} pxe={pxeLocal} errorMessage={errorMessage} />
+        <Router
+          isLoading={isLoading}
+          pxe={pxeLocal}
+          errorMessage={errorMessage}
+        />
+        {/* <h1>Hrllo</h1> */}
       </ThemeProvider>
       <Toaster />
     </>

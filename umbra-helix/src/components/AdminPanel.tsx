@@ -7,7 +7,7 @@ import {
   AztecAddress,
   Fr,
   PXE,
-  readFieldCompressedString
+  readFieldCompressedString,
 } from "@aztec/aztec.js";
 import chalk from "chalk";
 import { toast } from "react-hot-toast";
@@ -21,19 +21,18 @@ export const AdminPanel = ({ pxe }: { pxe: PXE }) => {
   }>({});
   const [nftContract, setNFTContract] = useAtom(nftContractAtom);
   const [NFTMintAddress, setNFTMintAddress] = useState("");
-  const [currentWallet] = useAtom(currentWalletAtom)
+  const [currentWallet] = useAtom(currentWalletAtom);
 
-  const { deployNFTContract } = useAccount(pxeClient)
-  const [tokenId, setTokenId] = useState(0)
+  const { deployNFTContract } = useAccount(pxeClient);
+  const [tokenId, setTokenId] = useState(0);
 
   const [searchParams] = useSearchParams();
   const userId = searchParams.get("userId");
   const [formData, setFormData] = useState({
-    name: '',
-    symbol: ''
+    name: "",
+    symbol: "",
   });
-  useLoadAccountFromStorage(pxe)
-
+  useLoadAccountFromStorage(pxe);
 
   const handleDeployNFTContract = async () => {
     if (!currentWallet) {
@@ -68,12 +67,14 @@ export const AdminPanel = ({ pxe }: { pxe: PXE }) => {
       const receipt = await tx.wait();
       console.log(
         chalk.green(
-          `Transaction has been mined on block ${chalk.bold(receipt.blockNumber)}`
+          `Transaction has been mined on block ${chalk.bold(
+            receipt.blockNumber
+          )}`
         )
       );
-      toast.success(`NFT Minted successfully`)
+      toast.success(`NFT Minted successfully`);
     } catch (error: any) {
-      toast.error(`NFT Mint error`, error.toString())
+      toast.error(`NFT Mint error`, error.toString());
     } finally {
       setIsInProgressObj({ ...isInProgressObj, isMintingNFT: false });
     }
@@ -261,7 +262,9 @@ export const AdminPanel = ({ pxe }: { pxe: PXE }) => {
                 className="grow"
                 placeholder="Token Name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
               />
             </label>
             <label className="input flex items-center gap-2 py-7 w-full">
@@ -270,7 +273,9 @@ export const AdminPanel = ({ pxe }: { pxe: PXE }) => {
                 className="grow"
                 placeholder="Token Symbol"
                 value={formData.symbol}
-                onChange={(e) => setFormData({ ...formData, symbol: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, symbol: e.target.value })
+                }
               />
             </label>
             <button
@@ -412,7 +417,6 @@ export const AdminPanel = ({ pxe }: { pxe: PXE }) => {
                 <Spinner />
               )}
             </button>
-
           </div>
           <hr />
           {/** Private Transfer NFT Flow  Ends*/}
