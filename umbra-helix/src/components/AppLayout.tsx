@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Spinner } from "./Spinnner.js";
 import Header from "./Header.js";
 import { PXE } from "@aztec/aztec.js";
+import { PopupWalletSdk } from "@shieldswap/wallet-sdk";
 
 const AppLayout = ({
   pxe,
@@ -14,6 +15,16 @@ const AppLayout = ({
   isLoading: boolean;
   errorMessage: string;
 }) => {
+  const [walletSDK, setWalletSDK] = useState<PopupWalletSdk | null>(null);
+
+  useEffect(() => {
+    if (pxe) {
+      const sdk = new PopupWalletSdk(pxe as any);
+      sdk.connect().then((acc) => {
+        console.log("connected wallet", acc.getAddress().toString());
+      });
+    }
+  }, [pxe]);
   if (isLoading) {
     console.log("isLoading", isLoading);
     return (
