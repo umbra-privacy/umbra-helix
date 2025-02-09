@@ -1,9 +1,9 @@
 import { getSchnorrAccount } from "@aztec/accounts/schnorr";
-import { AccountWalletWithSecretKey, Fr, PXE } from "@aztec/aztec.js";
+import { AccountWalletWithSecretKey, Fr, PXE, Wallet } from "@aztec/aztec.js";
 import { useAtom } from "jotai";
 import { walletsAtom, currentWalletAtom } from "../atoms.js";
 import { ACCOUNTS_STORAGE_KEY, NFT_CONTRACT_KEY } from "../constants.js";
-// import { NFTContract } from "../artifacts/NFT.js";
+import { NFTContract } from "@aztec/noir-contracts.js/NFT";
 import { deriveSigningKey, GrumpkinScalar } from "@aztec/circuits.js";
 import { toast } from "react-hot-toast";
 import { useLocalStorage } from "react-use";
@@ -41,7 +41,8 @@ export const useAccount = (pxeClient: PXE) => {
         signingPrivateKey
       );
       console.log("Before Setup");
-      const wallet = await account.waitSetup();
+      await account.waitSetup();
+      const wallet = (await account.getWallet()) as any as Wallet;
       const { address } = await account.getCompleteAddress();
       console.log("Account Address", address);
       const salt = account.getInstance().salt;
@@ -88,23 +89,23 @@ export const useAccount = (pxeClient: PXE) => {
   };
 
   const deployNFTContract = async (
-    admin: AccountWalletWithSecretKey,
+    admin: Wallet,
     name: string,
     symbol: string
   ) => {
     //TODO: Replace it with new nft contract
-    // const adminAddress = admin.getAddress();
-    // const deployedContract = await NFTContract.deploy(
-    //   admin,
-    //   adminAddress,
-    //   name,
-    //   symbol
-    // )
-    //   .send()
-    //   .deployed();
-    // setNFTContractInLocalStorage(deployedContract.address.toString());
-    // const nft = await NFTContract.at(deployedContract.address, admin);
-    // return nft;
+    const adminAddress = await admin.getAddress();
+    const deployedContract = await NFTContract.deploy(
+      admin,
+      adminAddress,
+      name,
+      symbol
+    )
+      .send()
+      .deployed();
+    setNFTContractInLocalStorage(deployedContract.address.toString());
+    const nft = await NFTContract.at(deployedContract.address, admin);
+    return nft;
   };
 
   return { createAccount, deployNFTContract, isCreating };

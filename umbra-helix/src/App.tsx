@@ -12,6 +12,7 @@ function App() {
   const [pxeLocal, setPXELocal] = useState<PXE>();
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
   useEffect(() => {
     setErrorMessage("");
     setIsLoading(true);
@@ -30,14 +31,6 @@ function App() {
   }, []);
 
   return (
-    // <div className="flex justify-center items-center h-screen w-screen flex-col">
-    //   <h1 className="text-4xl font-bold text-blue-600">Aztec Starter</h1>
-    //   {isLoading && <h1> Loading ....</h1>}
-    //   {errorMessage && <h2 className="text-red-600">{errorMessage}</h2>}
-
-    //   {!isLoading && !errorMessage && <WalletInteractions />}
-    //   <Toaster />
-    // </div>
     <>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {errorMessage && <h2 className="text-red-600">{errorMessage}</h2>}
@@ -46,7 +39,6 @@ function App() {
           pxe={pxeLocal}
           errorMessage={errorMessage}
         />
-        {/* <h1>Hrllo</h1> */}
       </ThemeProvider>
       <Toaster />
     </>

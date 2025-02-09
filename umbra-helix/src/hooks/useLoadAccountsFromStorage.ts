@@ -28,64 +28,63 @@ export const useLoadAccountFromStorage = (pxeClient: PXE) => {
     localAccounts = [];
   }
 
-  // const load = async () => {
-  //   if (!pxeClient) return;
-  //   try {
-  //     const registeredAccounts = await pxeClient.getRegisteredAccounts();
-  //     const registeredAddresses = registeredAccounts.map(({ address }) =>
-  //       address.toString()
-  //     );
-  //     console.log("Registered addresses", registeredAddresses);
+  const load = async () => {
+    if (!pxeClient) return;
+    try {
+      const registeredAccounts = await pxeClient.getRegisteredAccounts();
+      const registeredAddresses = registeredAccounts.map(({ address }) =>
+        address.toString()
+      );
+      console.log("Registered addresses", registeredAddresses);
 
-  //     const walletsPromises = localAccounts.map(
-  //       async ({ secretKey, salt, address }) => {
-  //         const account = await getSchnorrAccount(
-  //           pxeClient,
-  //           Fr.fromString(secretKey),
-  //           deriveSigningKey(Fr.fromString(secretKey)),
-  //           Fr.fromString(salt)
-  //         );
-  //         console.log(
-  //           "Storage account address",
-  //           account.getAddress().toString(),
-  //           address
-  //         );
+      const walletsPromises = localAccounts.map(
+        async ({ secretKey, salt, address }) => {
+          const account = await getSchnorrAccount(
+            pxeClient,
+            Fr.fromString(secretKey),
+            deriveSigningKey(Fr.fromString(secretKey)),
+            Fr.fromString(salt)
+          );
+          console.log(
+            "Storage account address",
+            account.getAddress().toString(),
+            address
+          );
 
-  //         const accountAddress = account.getAddress().toString();
-  //         let wallet: AccountWalletWithSecretKey | null = null;
-  //         if (registeredAddresses.includes(accountAddress)) {
-  //           wallet = await account.getWallet();
-  //         } else {
-  //           try {
-  //             wallet = await account.waitSetup();
-  //           } catch (error) {
-  //             console.error(error);
-  //           }
-  //         }
-  //         if (wallet) return wallet;
-  //         return null;
-  //       }
-  //     );
-  //     let wallets = (await Promise.all(walletsPromises)).filter(
-  //       (wallet) => wallet !== null
-  //     );
-  //     setWallets(wallets);
-  //     if (wallets.length > 0) {
-  //       setCurrentWallet(wallets[0]);
-  //       if (nftContractAddress) {
-  //         try {
-  //           // const nft = await NFTContract.at(AztecAddress.fromString(nftContractAddress), wallets[0])
-  //           // setNFTContract(nft)
-  //         } catch (error) {}
-  //       }
-  //     }
-  //   } catch (err) {
-  //     console.log("Failed to load aaccounts from storage", err);
-  //   }
-  // };
+          const accountAddress = account.getAddress().toString();
+          let wallet: AccountWalletWithSecretKey | null = null;
+          if (registeredAddresses.includes(accountAddress)) {
+            wallet = await account.getWallet();
+          } else {
+            try {
+              wallet = await account.waitSetup();
+            } catch (error) {
+              console.error(error);
+            }
+          }
+          if (wallet) return wallet;
+          return null;
+        }
+      );
+      let wallets = (await Promise.all(walletsPromises)).filter(
+        (wallet) => wallet !== null
+      );
+      setWallets(wallets);
+      if (wallets.length > 0) {
+        setCurrentWallet(wallets[0]);
+        if (nftContractAddress) {
+          try {
+            // const nft = await NFTContract.at(AztecAddress.fromString(nftContractAddress), wallets[0])
+            // setNFTContract(nft)
+          } catch (error) {}
+        }
+      }
+    } catch (err) {
+      console.log("Failed to load aaccounts from storage", err);
+    }
+  };
   useEffect(() => {
-    // load();
+    load();
   }, []);
-  // return { loadAccounts: load };
-  return { loadAccounts: () => {} };
+  return { loadAccounts: load };
 };

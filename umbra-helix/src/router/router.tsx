@@ -22,9 +22,9 @@ export const Router = ({
       <BrowserRouter>
         <AppLayout pxe={pxe} isLoading={isLoading} errorMessage={errorMessage}>
           <Routes>
-            {/* <Route path="/verify" element={<VerifyWallet pxe={pxe!} />} />
+            {/* <Route path="/verify" element={<VerifyWallet pxe={pxe!} />} /> */}
             <Route path="/admin" element={<AdminPanel pxe={pxe!} />} />
-            <Route path="/" element={<Navigate to="/admin" replace />} /> */}
+            {/* <Route path="/" element={<Navigate to="/admin" replace />} /> */}
           </Routes>
         </AppLayout>
         <h2>Only Header</h2>
